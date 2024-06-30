@@ -5,28 +5,52 @@ public class Arqueiro extends Personagem {
 
     public Arqueiro() {}
 
-    public Arqueiro(String nome, int pontosVida, int forca, int defesa, int destreza) {
-        super(nome, pontosVida, forca, defesa);
-        this.destreza = destreza;
+
+    public Arqueiro(String nome) {
+        super(nome, 7, 5, 4, 0);
+        setAtributoEspecial(10);
     }
 
     @Override
     public void usarMagia(/*indicar inimigo*/) {
-        if(getDestreza()<=0){
+        int astucia;
+        if(getAtributoEspecial()<=0)
             System.out.println("Você se seus reflexos mais lentos!\n" +
                     "Procure uma poção ou um lugar seguro para descansar!");
-        }else{
-            int astucia = getForca() * 2;
+        else
+            astucia = getAtributoEspecial() * 2; //talvez colocar algo mais randomico..
             /*indicar inimigo e o dano feito*/
-            setDestreza(-3);
-        }
+            setAtributoEspecial(-3);
     }
 
-    public int getDestreza() {
+
+    @Override
+    public int atacar() {
+        return (int) (Math.random()*(getForca() + 1.5 * getAtributoEspecial() + 0.5 * getXp()));
+    }
+
+    @Override
+    public int defender() {
+        return 0;
+    }
+
+
+    @Override
+    public int getAtributoEspecial() {
         return destreza;
+
     }
 
-    public void setDestreza(int destreza) {
+    @Override
+    public void setAtributoEspecial(int destreza) {
         this.destreza = destreza;
     }
+
+    //    public int getDestreza() {
+//        return destreza;
+//    }
+//
+//    public void setDestreza(int destreza) {
+//        this.destreza = destreza;
+//    }
 }
