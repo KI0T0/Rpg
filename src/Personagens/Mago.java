@@ -5,29 +5,56 @@ public class Mago extends Personagem{
 
     public Mago() {}
 
-    public Mago(String nome, int pontosVida, int forca, int defesa, int pontosMagia) {
-        super(nome, pontosVida, forca, defesa);
-        setPontosMagia(pontosMagia);
+//    public Mago(String nome, int maxVida, int forca, int defesa, int xp, int pontosMagia) {
+//        super(nome, maxVida, forca, defesa, xp);
+//        this.pontosMagia = pontosMagia;
+//    }
+
+    public Mago(String nome) {
+        super(nome, 6, 4, 3, 0);
+        setAtributoEspecial(20);
     }
 
 
     @Override
     public void usarMagia(/*indicar inimigo*/) {
-        if(getPontosMagia()<=0){
+        if(getAtributoEspecial()<=0){
             System.out.println("Você se sente sem foco para utilizar sua magia!\n" +
                     "Procure uma poção ou um lugar seguro para descansar!");
         }else{
-            int danoMagico = getForca() * 2;
+            int danoMagico = (int)(Math.random()*((getForca() + getAtributoEspecial()))/2);
             /*indicar inimigo e o dano feito*/
-            setPontosMagia(-10);
+            setAtributoEspecial(-5);
         }
     }
 
-    public int getPontosMagia() {
-        return pontosMagia;
+
+    @Override
+    public int atacar() {
+        return (int) (Math.random()*(getForca() + 2.0 * getAtributoEspecial() + 0.7 * getXp()));
     }
 
-    public void setPontosMagia(int pontosMagia) {
+    @Override
+    public int defender() {
+        return 0;
+    }
+
+
+    @Override
+    public int getAtributoEspecial() {
+        return pontosMagia;
+    }
+    @Override
+    public void setAtributoEspecial(int pontosMagia) {
         this.pontosMagia = pontosMagia;
     }
+
+
+//    public int getPontosMagia() {
+//        return pontosMagia;
+//    }
+//
+//    public void setPontosMagia(int pontosMagia) {
+//        this.pontosMagia = pontosMagia;
+//    }
 }
