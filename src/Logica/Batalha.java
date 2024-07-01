@@ -3,9 +3,12 @@ package Logica;
 
 import Personagens.Inimigo;
 
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import static Logica.Jogo.*;
+
 
 public class Batalha {
 
@@ -13,14 +16,14 @@ public class Batalha {
     public static boolean ordemTurno() {
         return Math.random() < 0.5;
     }
+    static int defesaOriginal = jogador.getDefesa();
 
     public static void batalha(Inimigo inimigo) {
-
         Scanner scanner = new Scanner(System.in);
+        boolean jogadorPrimeiro = ordemTurno();
 
         //loop principal
         while ((jogador.getPontosVida() > 0 && inimigo.getPontosVida() > 0)) {
-            boolean jogadorPrimeiro = ordemTurno();
 //          Vez do jogador
             if (jogadorPrimeiro) {
                 limpaConsole();
@@ -28,7 +31,7 @@ public class Batalha {
                 mensagem(jogador.getNome() + "\nHP: " + jogador.getPontosVida() + "/" + jogador.getMaxVida());
                 System.out.println("Escolha uma ação:");
                 imprimeSeparador(20);
-                System.out.println("(1) Lute\n(2) Use poção\n(3) Fuja!");
+                System.out.println("(1) Lute\n(2) Fuja!");
                 int resposta = scanner.nextInt();
 
 //              (1) Lute
@@ -36,21 +39,20 @@ public class Batalha {
                     System.out.println("Escolha uma ação:");
                     imprimeSeparador(20);
                     System.out.println("(1) Atacar\n(2) Usar Habilidade\n(3) Defender");
-                    resposta = scanner.nextInt();
+
+                    try {
+                        resposta = scanner.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Por favor, entre apenas com a opção 1, 2 ou 3..");
+                        scanner.nextLine();
+                        aperteParaContinuar();
+                    }
 //                  (1) Atacar
                     if (resposta == 1) {
+                        System.out.println("Jogador atacar = " + jogador.atacar() + "Inimigo defender = " + inimigo.defender() + "(exemplo)");
                         int dano = jogador.atacar() - inimigo.defender();
                         if (dano < 0)
                             dano = 0;
-//                  Checa se o dano recebido foi negativo
-//                        if (danoRecebido < 0) {
-////          Se for, dá um bonus de ataque ao jogador por ter defendido bem
-//                            dano -= danoRecebido / 2;
-//                            danoRecebido = 0;
-//                        }
-
-//                  Distribuição de dano entre jogador e inimigo
-//
                         inimigo.setPontosVida(inimigo.getPontosVida() - dano);
                         limpaConsole();
                         mensagem("BATALHA");
@@ -59,57 +61,87 @@ public class Batalha {
                         aperteParaContinuar();
 //                  (2) Usar Habilidade
                     } else if (resposta == 2) {
-//                       Implementar Usar Habilidade
+//                       int dano = jogador.usarMagia(inimigo,jogador);
+//                       inimigo.setPontosVida(inimigo.getPontosVida() - dano);
+                        System.out.println("Escolha uma habilidade:");
+                        List<Habilidades> habilidades = jogador.getHabilidade();
+                        for (int i = 0; i < habilidades.size(); i++) {
+                            System.out.println("(" + (i + 1) + ") " + habilidades.get(i).getNome());
+                        }
+                        try {
+                            int habilidadeEscolhida = scanner.nextInt();
+                            if (habilidadeEscolhida >= 1 && habilidadeEscolhida <= habilidades.size()) {
+                                Habilidades habilidade = habilidades.get(habilidadeEscolhida - 1);
+                                int danoHabilidade = jogador.usarMagia(inimigo, habilidade);
+                                inimigo.setPontosVida(inimigo.getPontosVida() - danoHabilidade);
+
+                                if (danoHabilidade > 0) {
+                                    System.out.println("Você usou " + habilidade.getNome() + " e causou " + danoHabilidade + " de dano no inimigo.");
+//                              Adicionado esse if == 0 pois pode ocorrer casos onde o Guerreiro use a sua habilidade uma segunda vez, se acalme e o dano seja negativo...
+                                }else if(danoHabilidade == 0){
+                                    System.out.println("Você errou miseravelmente....");
+                                }
+                                aperteParaContinuar();
 
 //                  (3) Defender)
-                    } else {
-//                       Implementar Defender
-                    }
+                            }
 
-//              (2) Use poção
-                }else if (resposta == 2) {
-//          Usar Poção (voltar e implementar)
-
-//              (3) Fugir
-                } else {
-                    if (ato != 5) {
-                        limpaConsole();
-                        if (Math.random() * 10 + 1 <= 3.5) {
-                            mensagem("Você fugiu da batalha!");
+                        } catch (InputMismatchException e) {
+                            System.out.println("Por favor, entre apenas com a opção 1, 2 ou 3..");
+                            scanner.nextLine();
                             aperteParaContinuar();
-                            break;
-                        } else {
-                            mensagem("Você não conseguiu escapar!");
-//              Jogador recebe dano por não conseguir fugir
-                            jogador.setPontosVida(inimigo.getPontosVida() - inimigo.atacar());
-                            if (jogador.getPontosVida() < 0)
-                                System.out.println("Você morreu!");
-                            jogadorMorreu();
-
                         }
+                    } else {
+                        System.out.println("Você se defende do próximo ataque!");
+                        jogador.setDefesa(jogador.getDefesa() + 5);
                     }
-                    else{
-                        mensagem("Seu corpo treme com o olhar o Necromante. Você não pode fugir!");
+
+//              (2) Fugir
+                } else if (ato != 5) {
+                    limpaConsole();
+                    if (Math.random() * 10 + 1 <= 3.5) {
+                        mensagem("Você fugiu da batalha!");
                         aperteParaContinuar();
+                        break;
+                    } else {
+                        mensagem("Você não conseguiu escapar!");
+//              Jogador recebe dano por não conseguir fugir
+                        jogador.setPontosVida(inimigo.getPontosVida() - inimigo.atacar());
+                        if (jogador.getPontosVida() < 0) {
+                            System.out.println("Você morreu!");
+                            jogadorMorreu();
+                        }
+
+
                     }
+                } else {
+                    mensagem("Seu corpo treme com o olhar o Necromante. Você não pode fugir!");
+                    aperteParaContinuar();
                 }
             } else {
-                int danoRecebido = inimigo.atacar() - jogador.defender();
-                jogador.setPontosVida(jogador.getPontosVida() - danoRecebido);
                 limpaConsole();
                 mensagem("BATALHA");
+                System.out.println("Inimigo atacar = " + inimigo.atacar() + "Jogador defender = " + jogador.defender() + "Exemplo...");
+                int danoRecebido = inimigo.atacar() - jogador.defender();
+                if (danoRecebido < 0)
+                    danoRecebido = 0;
+                jogador.setPontosVida(jogador.getPontosVida() - danoRecebido);
                 System.out.println(inimigo.getNome() + " causou em você " + danoRecebido + " de dano!");
                 imprimeSeparador(15);
                 aperteParaContinuar();
+                if (jogador.getPontosVida() <= 0) {
+                    jogadorMorreu();
+                }
+                jogador.setDefesa(defesaOriginal);
             }
+            jogadorPrimeiro = !jogadorPrimeiro;
         }
-        if (jogador.getPontosVida() < 0) {
-            jogadorMorreu();
-        } else if (inimigo.getPontosVida() < 0)
+        if (inimigo.getPontosVida() <= 0) {
             limpaConsole();
             mensagem("Você derrotou " + inimigo.getNome() + "!");
-            jogador.setXp(jogador.getXp() + inimigo.getXp());
+            jogador.setXp(inimigo.getXp());
             mensagem("Você ganhou " + inimigo.getXp() + "!");
             aperteParaContinuar();
+        }
     }
 }

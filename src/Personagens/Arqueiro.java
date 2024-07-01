@@ -1,5 +1,7 @@
 package Personagens;
 
+import Logica.Habilidades;
+
 public class Arqueiro extends Personagem {
     public int destreza;
 
@@ -9,28 +11,33 @@ public class Arqueiro extends Personagem {
     public Arqueiro(String nome) {
         super(nome, 7, 5, 4, 0);
         setAtributoEspecial(10);
+        setHabilidade(new Habilidades("Flecha Trovoada","Trovão",15));
     }
 
     @Override
-    public void usarMagia(/*indicar inimigo*/) {
-        int astucia;
+    public int usarMagia(Inimigo inimigo, Habilidades habilidade) {
+        int dano = 0;
         if(getAtributoEspecial()<=0) {
             System.out.println("Você se seus reflexos mais lentos!\n" +
                     "Procure uma poção ou um lugar seguro para descansar!");
-            setAtributoEspecial(-3);
+            dano+=-1;
         } else {
-            astucia = getAtributoEspecial() * 2; //talvez colocar algo mais randomico..
-            setAtributoEspecial(-3);
-            /*indicar inimigo e o dano feito*/
+            for (Habilidades hab : habilidades) {
+                if (hab.getNome().equals("Flecha Trovoada")) {
+                    dano += calcularDano(hab, inimigo);
+                    setAtributoEspecial(getAtributoEspecial()-3);
+                    break;
+                }
+            }
         }
-
+        return dano;
     }
 
 
     @Override
     public int atacar() {
         double chanceCritico = Math.random();
-        int danoBase = (int) (Math.random() * (getForca() + 1.5 * getAtributoEspecial() + 0.5 * getXp()));
+        int danoBase = (int) (Math.random() * (getForca() + 5.0 * getLevel()));
         double chanceCriticoTotal = 0.25 + 0.01 * getAtributoEspecial();
         if (chanceCritico <= chanceCriticoTotal) {
             danoBase *= 1.5; // 50% a mais de dano
@@ -41,14 +48,18 @@ public class Arqueiro extends Personagem {
 
     @Override
     public int defender() {
-        return 0;
+        int reducaoDefesa = (int) (Math.random() * (getDefesa() / 2.0)) + 1;
+        return reducaoDefesa + getForca();
     }
-
 
     @Override
     public int getAtributoEspecial() {
-        return destreza;
+        return this.destreza;
+    }
 
+    @Override
+    public String getTipo() {
+        return "Trovão";
     }
 
     @Override
@@ -56,11 +67,4 @@ public class Arqueiro extends Personagem {
         this.destreza = destreza;
     }
 
-    //    public int getDestreza() {
-//        return destreza;
-//    }
-//
-//    public void setDestreza(int destreza) {
-//        this.destreza = destreza;
-//    }
 }
