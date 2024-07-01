@@ -31,8 +31,15 @@ public class Mago extends Personagem{
 
     @Override
     public int atacar() {
-        return (int) (Math.random()*(getForca() + 2.0 * getAtributoEspecial() + 0.7 * getXp()));
+        double chanceCritico = Math.random();
+        int danoBase = (int) (Math.random() * (getForca() + 2.0 * getAtributoEspecial() + 0.7 * getXp()));
+        double chanceCriticoTotal = 0.15 + 0.01 * getAtributoEspecial();
+        if (chanceCritico <= chanceCriticoTotal) {
+            danoBase *= 1.5; // 50% a mais de dano
+        }
+        return danoBase;
     }
+
 
     @Override
     public int defender() {
