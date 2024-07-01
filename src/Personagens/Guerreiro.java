@@ -23,12 +23,17 @@ public class Guerreiro extends Personagem{
 
     @Override
     public int atacar() {
-        return (int) (Math.random()*(getForca() * (1 + 0.5 * getAtributoEspecial()) + 0.3 * getXp()));
+        double chanceCritico = Math.random();
+        int danoBase = (int) (Math.random() * (getForca() * (1 + 0.5 * getAtributoEspecial()) + 0.3 * getXp()));
+        if (chanceCritico <= 0.10) {
+            danoBase *= 1.5;
+        }
+        return danoBase;
     }
 
     @Override
     public int defender() {
-        return (int) (Math.random()*(getXp()/4 + 1) + getXp()/4 + 3);
+        return (int) (Math.random()*((double) getXp() /4 + 1) + (double) getXp() /4 + 3);
     }
 
     @Override
@@ -40,6 +45,8 @@ public class Guerreiro extends Personagem{
     public int getAtributoEspecial() {
         return furia;
     }
+
+
 
     //    public boolean getFuria() {
 //        return furia;

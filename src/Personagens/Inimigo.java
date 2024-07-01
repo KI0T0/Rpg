@@ -1,8 +1,7 @@
 package Personagens;
 
 public class Inimigo extends Personagem{
-    static Personagem jogador;
-    int jogadorXp = jogador.getXp();
+    int jogadorXp;
 
     public Inimigo(String nome, int jogadorXp) {
         super(nome,(int) (Math.random()*(double)(jogadorXp + jogadorXp/3 + 5)),0,0,(int)(Math.random()*(double)((jogadorXp /4+2)+1)));

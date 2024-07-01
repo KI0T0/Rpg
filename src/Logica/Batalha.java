@@ -72,19 +72,25 @@ public class Batalha {
 
 //              (3) Fugir
                 } else {
-                    limpaConsole();
-                    if (Math.random() * 10 + 1 <= 3.5) {
-                        mensagem("Você fugiu da batalha!");
-                        aperteParaContinuar();
-                        break;
-                    } else {
-                        mensagem("Você não conseguiu escapar!");
+                    if (ato != 5) {
+                        limpaConsole();
+                        if (Math.random() * 10 + 1 <= 3.5) {
+                            mensagem("Você fugiu da batalha!");
+                            aperteParaContinuar();
+                            break;
+                        } else {
+                            mensagem("Você não conseguiu escapar!");
 //              Jogador recebe dano por não conseguir fugir
-                        jogador.setPontosVida(inimigo.getPontosVida() - inimigo.atacar());
-                        if (jogador.getPontosVida() < 0)
-                            System.out.println("Você morreu!");
-                        jogadorMorreu();
+                            jogador.setPontosVida(inimigo.getPontosVida() - inimigo.atacar());
+                            if (jogador.getPontosVida() < 0)
+                                System.out.println("Você morreu!");
+                            jogadorMorreu();
 
+                        }
+                    }
+                    else{
+                        mensagem("Seu corpo treme com o olhar o Necromante. Você não pode fugir!");
+                        aperteParaContinuar();
                     }
                 }
             } else {

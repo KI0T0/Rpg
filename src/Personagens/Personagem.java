@@ -6,7 +6,10 @@ public abstract class Personagem {
     protected int maxVida;
     protected int forca;
     protected int defesa;
+    protected int level;
     protected int xp;
+    protected int xpParaUpar;
+
     //    adicionar lista de Habilidades futuramente
 
 
@@ -21,6 +24,8 @@ public abstract class Personagem {
         this.defesa = defesa;
         this.pontosVida = maxVida;
         this.xp = xp;
+        this.xpParaUpar = 20;
+        this.level = 1;
     }
 
 //    Métodos que todas as classes possuem, porém é diferente para cada uma (por isso o abstract)
@@ -40,19 +45,35 @@ public abstract class Personagem {
     public void calcularDano(/*adicionar inimigo (provavelmente)*/){
 
     }
+    private void checaLevel() {
+        while (this.xp >= this.xpParaUpar) {
+            this.xp -= this.xpParaUpar;
+            this.level++;
+            this.xpParaUpar += 20; // Ajuste o aumento conforme necessário
+            aumentarAtributos();
+            System.out.println("Parabéns! Você subiu para o nível " + this.level + "!");
+        }
+    }
 
+    private void aumentarAtributos() {
+        this.setMaxVida(getMaxVida() + 10);
+        this.pontosVida = this.getMaxVida();
+        this.setDefesa(getDefesa() + 2);
+        // Ajuste os valores de aumento conforme necessário
+        this.setForca(getForca() + 3);
+    }
 
 
 
 //    getters e setters
 
 
-    public String getNome() {
-        return nome;
+    public int getLevel() {
+        return level;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public String getNome() {
+        return nome;
     }
 
     public int getPontosVida() {
@@ -67,8 +88,7 @@ public abstract class Personagem {
         return maxVida;
     }
 
-    public void setMaxVida(){
-        this.maxVida = maxVida;
+    public void setMaxVida(int i){
     }
 
     public int getXp(){
@@ -76,7 +96,8 @@ public abstract class Personagem {
     }
 
     public void setXp(int i){
-        this.xp = xp;
+        this.xp += xp;
+        checaLevel();
     }
 
     public int getForca() {
