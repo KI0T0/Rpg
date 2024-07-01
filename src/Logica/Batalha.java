@@ -25,6 +25,7 @@ public class Batalha {
 
         //loop principal
         while ((jogador.getPontosVida() > 0 && inimigo.getPontosVida() > 0)) {
+
 //          Vez do jogador
             if (jogadorPrimeiro) {
                 limpaConsole();
@@ -48,9 +49,9 @@ public class Batalha {
                         scanner.nextLine();
                         aperteParaContinuar();
                     }
+
 //                  (1) Atacar
                     if (resposta == 1) {
-                        System.out.println("Jogador atacar = " + jogador.atacar() + "Inimigo defender = " + inimigo.defender() + "(exemplo)");
                         int dano = jogador.atacar() - inimigo.defender();
                         if (dano < 0)
                             dano = 0;
@@ -60,10 +61,9 @@ public class Batalha {
                         System.out.println("Você causou " + dano + " de dano em " + inimigo.getNome() + "!");
                         imprimeSeparador(15);
                         aperteParaContinuar();
+
 //                  (2) Usar Habilidade
                     } else if (resposta == 2) {
-//                       int dano = jogador.usarMagia(inimigo,jogador);
-//                       inimigo.setPontosVida(inimigo.getPontosVida() - dano);
                         System.out.println("Escolha uma habilidade:");
                         List<Habilidades> habilidades = jogador.getHabilidade();
                         for (int i = 0; i < habilidades.size(); i++) {
@@ -120,7 +120,6 @@ public class Batalha {
             } else {
                 limpaConsole();
                 mensagem("BATALHA");
-                System.out.println("Inimigo atacar = " + inimigo.atacar() + "Jogador defender = " + jogador.defender() + "Exemplo...");
                 int danoRecebido = inimigo.atacar() - jogador.defender();
                 if (danoRecebido < 0)
                     danoRecebido = 0;
