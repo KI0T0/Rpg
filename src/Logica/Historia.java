@@ -67,5 +67,6 @@ public class Historia {
         System.out.println("Jogo desenvolvido por Felipe Gonçalves. GitHub: https://github.com/KI0T0");
         System.out.println("Agradecimentos:\nMinha esposa, por cuidar da minha filha enquanto programava");
         System.out.println("Professor Rannyer Thom, pelos aprendizados repassados nos últimos dias");
+        aperteParaContinuar();
     }
 }

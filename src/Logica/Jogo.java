@@ -3,6 +3,7 @@ package Logica;
 import Personagens.*;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import static Logica.Batalha.batalha;
@@ -11,7 +12,8 @@ public class Jogo {
     static Scanner scanner = new Scanner(System.in);
     static Personagem jogador;
     public static boolean rodando;
-
+    static boolean transicaoAtoMostrada = false;
+    private static boolean atoVMostrado = false;
 
     //          Eventos aleatórios
     public static String[] eventos = {"Batalha", "Batalha", "Batalha", "Descanso", "Descanso"};
@@ -25,22 +27,6 @@ public class Jogo {
     public static int ato = 1;
     public static String[] lugares = {"A Floresta", "A Vila", "O Desfiladeiro", "O cemitério", "A cripta"};
 
-
-    //      Método para receber os comandos
-    public static int lerComando(String prompt, int escolhaUser) {
-        int entrada;
-
-        do {
-            System.out.println(prompt);
-            try {
-                entrada = Integer.parseInt(scanner.next());
-            } catch (Exception e) {
-                entrada = -1;
-                System.out.println("Opção inválida!");
-            }
-        } while (entrada < 1 || entrada > escolhaUser);
-        return entrada;
-    }
 
     //      Método para limpar console
     public static void limpaConsole() {
@@ -79,7 +65,7 @@ public class Jogo {
         boolean classeSetada = false;
         int classe = 0;
         int resposta = 0;
-        String nome = "";
+        String nome;
         limpaConsole();
         imprimeSeparador(40);
         imprimeSeparador(30);
@@ -210,7 +196,10 @@ public class Jogo {
                 eventos[4] = "Batalha";
                 break;
             case 2:
-                Historia.mostraAtoII();
+                if(!transicaoAtoMostrada) {
+                    Historia.mostraAtoII();
+                    transicaoAtoMostrada = true;
+                }
                 ato = 2;
                 lugar = 1;
                 inimigos[0] = "Goblin";
@@ -227,7 +216,10 @@ public class Jogo {
                 jogador.setPontosVida(jogador.getMaxVida());
                 break;
             case 3:
-                Historia.mostraAtoIII();
+                if(!transicaoAtoMostrada) {
+                    Historia.mostraAtoIII();
+                    transicaoAtoMostrada = true;
+                }
                 ato = 3;
                 lugar = 2;
                 inimigos[0] = "Bandido";
@@ -243,7 +235,10 @@ public class Jogo {
                 eventos[4] = "Batalha";
                 break;
             case 4:
-                Historia.mostraAtoIV();
+                if(!transicaoAtoMostrada) {
+                    Historia.mostraAtoIV();
+                    transicaoAtoMostrada = true;
+                }
                 ato = 4;
                 lugar = 3;
                 inimigos[0] = "Zumbi";
@@ -260,10 +255,15 @@ public class Jogo {
                 jogador.setPontosVida(jogador.getMaxVida());
                 break;
             case 5:
-                Historia.mostraAtoV();
+//                System.out.println("CASE 5 do switch checaAto antes da transição");
+//                if(!transicaoAtoMostrada) {
+//                    Historia.mostraAtoV();
+//                    transicaoAtoMostrada = true;
+//                }
                 ato = 5;
                 lugar = 4;
-                inimigos[0] = "Necromante";
+//                System.out.println("CASE 5 do switch checaAto depois da transição");
+//                batalhaFinal();
                 break;
         }
     }
@@ -278,18 +278,40 @@ public class Jogo {
             System.out.println("Você encontra um lugar pacífico para descansar.... Você recuperou 5 de HP!");
             System.out.println("Seu HP atual é " + jogador.getPontosVida());
             jogador.setPontosVida(jogador.getPontosVida() + 5);
+            if(jogador.getClass().getName().equals("Arqueiro"))
+                jogador.setAtributoEspecial(10);
+            else if(jogador.getClass().getName().equals("Mago"))
+                    jogador.setAtributoEspecial(20);
             if (jogador.getPontosVida() > jogador.getMaxVida())
                 jogador.setPontosVida(jogador.getMaxVida());
             aperteParaContinuar();
         }
     }
 
+    public static void batalhaFinal(){
+//        Cria Necromante para usuário lutar
+        batalha(new Inimigo("O NECROMANTE",300));
+        if (jogador.getPontosVida() <= 0) {
+            jogadorMorreu();
+        }
+        Historia.mostraFim();
+        System.out.println("Vai acabar o jogo em BatalhaFinal");
+        aperteParaContinuar();
+        rodando = false;
+    }
+
     //      Método para continuar o jogo
     public static void continueOJogo() {
         checaAto();
-        System.out.println("continueOJogo() utilizado");
-        if (ato != 5)
+        if (ato == 5 && !atoVMostrado) {
+            Historia.mostraAtoV();
+            atoVMostrado = true; // Marca o Ato V como mostrado
+            aperteParaContinuar(); // Adiciona uma pausa para o jogador ler o texto
+        } else if (ato == 5 && atoVMostrado) {
+            batalhaFinal();
+        } else {
             encontroRandomico();
+        }
     }
 
     //      Mostre as informações do seu personagem
@@ -299,13 +321,19 @@ public class Jogo {
         System.out.println(jogador.getNome() + " HP: " + jogador.getPontosVida() + "/" + jogador.getMaxVida());
         System.out.println("Classe: " + jogador.getClass().getSimpleName());
         imprimeSeparador(20);
-        System.out.println("XP: " + jogador.getXp());
+        System.out.println("Level: " + jogador.getLevel() + " XP: " + jogador.getXp() + "/"+jogador.getXpParaUpar());
         imprimeSeparador(20);
-        System.out.println("Atributo Especial: " + jogador.getAtributoEspecial()); //trocar por habilidade, talvez?
-        /*adicionar mais coisas futuramente*/
-        aperteParaContinuar();
+        List<Habilidades> habilidades = jogador.getHabilidade();
+        if (habilidades.isEmpty()) {
+            System.out.println("Habilidades: Nenhuma habilidade disponível.");
+        } else {
+            System.out.println("Habilidades:");
+            for (Habilidades habilidade : habilidades) {
+                System.out.println("- " + habilidade.getNome() + " (Tipo: " + habilidade.getTipo() + " - Dano Base: " + habilidade.getDanoBase() + ")\n");
+            }
+            aperteParaContinuar();
+        }
     }
-
     //      Batalha aleatória
     public static void batalhaRandom() {
         limpaConsole();
@@ -314,79 +342,12 @@ public class Jogo {
         batalha(new Inimigo((inimigos[(int) (Math.random() * inimigos.length)]), jogador.getXp()));
     }
 
-//      Método da batalha
 
-    //
-//        public static void batalha(Inimigo inimigo){
-//            //loop principal
-//            while(true){
-//                limpaConsole();
-//                mensagem(inimigo.getNome() + "\nHP: " + inimigo.getPontosVida()+"/" + inimigo.getMaxVida());
-//                mensagem(jogador.getNome() + "\nHP: " + jogador.getPontosVida()+"/" + jogador.getMaxVida());
-//                System.out.println("Escolha uma ação:");
-//                imprimeSeparador(20);
-//                System.out.println("(1) Lute\n(2) Use poção\n(3) Fuja!");
-//                int resposta = scanner.nextInt();
-//                if(resposta == 1){
-////              (1) Lute
-////                  Necessário calcular o dano
-//                    int dano = jogador.atacar() - inimigo.defender();
-//                    int danoRecebido = inimigo.atacar() - jogador.defender();
-////                  Checa se o dano recebido foi negativo
-//                    if(danoRecebido < 0){
-////                  Se for, dá um bonus de ataque ao jogador por ter defendido bem
-//                        dano -= danoRecebido/2;
-//                        danoRecebido = 0;
-//                    }
-//                    if(dano < 0)
-//                        dano = 0;
-////                  Distribuição de dano entre jogador e inimigo
-//                    jogador.setPontosVida(jogador.getPontosVida() - danoRecebido);
-//                    inimigo.setPontosVida(inimigo.getPontosVida() - dano);
-////                  Mostre o resultado da batalha
-//                    limpaConsole();
-//                    mensagem("BATALHA");
-//                    System.out.println("Você causou " + dano + " de dano em " + inimigo.getNome() + "!");
-//                    imprimeSeparador(15);
-//                    System.out.println(inimigo.getNome() + " causou em você " + danoRecebido + " de dano!");
-//                    aperteParaContinuar();
-//                    if(jogador.getPontosVida() < 0){
-//                        jogadorMorreu();
-//                        break;
-//                    }else if(inimigo.getPontosVida() < 0){
-//                        limpaConsole();
-//                        mensagem("Você derrotou " + inimigo.getNome() + "!");
-//                        jogador.setXp(jogador.getXp()+inimigo.getXp());
-//                        mensagem("Você ganhou " + inimigo.getXp() + "!");
-//                        aperteParaContinuar();
-//                        break;
-//                    }
-//                } else if (resposta == 2) {
-////                      Usa poção (voltar e implementar)
-//
-//                }else{
-////                   Fugir
-//                     limpaConsole();
-//                     if(Math.random() * 10 + 1 <= 3.5){
-//                         mensagem("Você fugiu da batalha!");
-//                         aperteParaContinuar();
-//                         break;
-//                     }else{
-//                         mensagem("Você não conseguiu escapar!");
-////                       Jogador recebe dano por não conseguir fugir
-//                         jogador.setPontosVida(inimigo.getPontosVida() - inimigo.atacar());
-//                         if(jogador.getPontosVida() < 0)
-//                             jogadorMorreu();
-//                     }
-//                }
-//
-//
-//            }
-//        }
     public static void jogadorMorreu() {
         limpaConsole();
         mensagem("Você morreu!");
-        mensagem("Você ganhou " + jogador.getXp() + "XP nessa jorndada. Tente novamente...");
+        mensagem("Você ganhou " + jogador.getXp() + " XP nessa jornada. Tente novamente...");
+        aperteParaContinuar();
         rodando = false;
     }
 

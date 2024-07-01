@@ -1,38 +1,43 @@
 package Personagens;
 
+import Logica.Habilidades;
+
+import java.util.ArrayList;
+
 public class Mago extends Personagem{
     public int pontosMagia;
 
     public Mago() {}
 
-//    public Mago(String nome, int maxVida, int forca, int defesa, int xp, int pontosMagia) {
-//        super(nome, maxVida, forca, defesa, xp);
-//        this.pontosMagia = pontosMagia;
-//    }
-
     public Mago(String nome) {
         super(nome, 6, 4, 3, 0);
         setAtributoEspecial(20);
+        setHabilidade(new Habilidades("Estaca de gelo","Gelo",30));
     }
-
 
     @Override
-    public void usarMagia(/*indicar inimigo*/) {
-        if(getAtributoEspecial()<=0){
+    public int usarMagia(Inimigo inimigo, Habilidades habilidade) {
+        int dano=0;
+        if (getAtributoEspecial() <= 0) {
             System.out.println("Você se sente sem foco para utilizar sua magia!\n" +
                     "Procure uma poção ou um lugar seguro para descansar!");
-        }else{
-            int danoMagico = (int)(Math.random()*((getForca() + getAtributoEspecial()))/2);
-            /*indicar inimigo e o dano feito*/
-            setAtributoEspecial(-5);
+            dano+=-1;
+        } else {
+            for (Habilidades hab : habilidades) {
+                if (hab.getNome().equals("Estaca de gelo")) {
+                    dano += calcularDano(hab, inimigo);
+                    setAtributoEspecial(getAtributoEspecial()-5);
+                    break;
+                }
+            }
         }
+        return dano;
     }
-
 
     @Override
     public int atacar() {
         double chanceCritico = Math.random();
-        int danoBase = (int) (Math.random() * (getForca() + 2.0 * getAtributoEspecial() + 0.7 * getXp()));
+        int danoBase = (int) (Math.random() * (getForca() + 3 * getLevel()));
         double chanceCriticoTotal = 0.15 + 0.01 * getAtributoEspecial();
         if (chanceCritico <= chanceCriticoTotal) {
             danoBase *= 1.5; // 50% a mais de dano
@@ -40,28 +45,25 @@ public class Mago extends Personagem{
         return danoBase;
     }
 
-
     @Override
     public int defender() {
-        return 0;
+        int reducaoDefesa = (int) (Math.random() * (getDefesa() / 2.0)) + 1;
+        return reducaoDefesa + getForca();
     }
-
 
     @Override
     public int getAtributoEspecial() {
-        return pontosMagia;
+        return this.pontosMagia;
     }
+
+    @Override
+    public String getTipo() {
+        return "Gelo";
+    }
+
     @Override
     public void setAtributoEspecial(int pontosMagia) {
         this.pontosMagia = pontosMagia;
     }
 
-
-//    public int getPontosMagia() {
-//        return pontosMagia;
-//    }
-//
-//    public void setPontosMagia(int pontosMagia) {
-//        this.pontosMagia = pontosMagia;
-//    }
 }
