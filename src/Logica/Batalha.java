@@ -13,10 +13,11 @@ import static Logica.Jogo.*;
 public class Batalha {
 
 
+    static int defesaOriginal = jogador.getDefesa();
+
     public static boolean ordemTurno() {
         return Math.random() < 0.5;
     }
-    static int defesaOriginal = jogador.getDefesa();
 
     public static void batalha(Inimigo inimigo) {
         Scanner scanner = new Scanner(System.in);
@@ -78,7 +79,7 @@ public class Batalha {
                                 if (danoHabilidade > 0) {
                                     System.out.println("Você usou " + habilidade.getNome() + " e causou " + danoHabilidade + " de dano no inimigo.");
 //                              Adicionado esse if == 0 pois pode ocorrer casos onde o Guerreiro use a sua habilidade uma segunda vez, se acalme e o dano seja negativo...
-                                }else if(danoHabilidade == 0){
+                                } else if (danoHabilidade == 0) {
                                     System.out.println("Você errou miseravelmente....");
                                 }
                                 aperteParaContinuar();
@@ -111,8 +112,6 @@ public class Batalha {
                             System.out.println("Você morreu!");
                             jogadorMorreu();
                         }
-
-
                     }
                 } else {
                     mensagem("Seu corpo treme com o olhar o Necromante. Você não pode fugir!");

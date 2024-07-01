@@ -9,24 +9,19 @@ import java.util.Scanner;
 import static Logica.Batalha.batalha;
 
 public class Jogo {
-    static Scanner scanner = new Scanner(System.in);
-    static Personagem jogador;
     public static boolean rodando;
-    static boolean transicaoAtoMostrada = false;
-    private static boolean atoVMostrado = false;
-
     //          Eventos aleatórios
     public static String[] eventos = {"Batalha", "Batalha", "Batalha", "Descanso", "Descanso"};
-
-
     //          Nome dos inimigos
     public static String[] inimigos = {"Lobo", "Goblin", "Ladrão", "Zumbi", "Necromancer"};
-
     //          Elementos da história
     public static int lugar = 0;
     public static int ato = 1;
     public static String[] lugares = {"A Floresta", "A Vila", "O Desfiladeiro", "O cemitério", "A cripta"};
-
+    static Scanner scanner = new Scanner(System.in);
+    static Personagem jogador;
+    static boolean transicaoAtoMostrada = false;
+    private static boolean atoVMostrado = false;
 
     //      Método para limpar console
     public static void limpaConsole() {
@@ -196,7 +191,7 @@ public class Jogo {
                 eventos[4] = "Batalha";
                 break;
             case 2:
-                if(!transicaoAtoMostrada) {
+                if (!transicaoAtoMostrada) {
                     Historia.mostraAtoII();
                     transicaoAtoMostrada = true;
                 }
@@ -216,7 +211,7 @@ public class Jogo {
                 jogador.setPontosVida(jogador.getMaxVida());
                 break;
             case 3:
-                if(!transicaoAtoMostrada) {
+                if (!transicaoAtoMostrada) {
                     Historia.mostraAtoIII();
                     transicaoAtoMostrada = true;
                 }
@@ -235,7 +230,7 @@ public class Jogo {
                 eventos[4] = "Batalha";
                 break;
             case 4:
-                if(!transicaoAtoMostrada) {
+                if (!transicaoAtoMostrada) {
                     Historia.mostraAtoIV();
                     transicaoAtoMostrada = true;
                 }
@@ -255,15 +250,8 @@ public class Jogo {
                 jogador.setPontosVida(jogador.getMaxVida());
                 break;
             case 5:
-//                System.out.println("CASE 5 do switch checaAto antes da transição");
-//                if(!transicaoAtoMostrada) {
-//                    Historia.mostraAtoV();
-//                    transicaoAtoMostrada = true;
-//                }
                 ato = 5;
                 lugar = 4;
-//                System.out.println("CASE 5 do switch checaAto depois da transição");
-//                batalhaFinal();
                 break;
         }
     }
@@ -278,19 +266,19 @@ public class Jogo {
             System.out.println("Você encontra um lugar pacífico para descansar.... Você recuperou 5 de HP!");
             System.out.println("Seu HP atual é " + jogador.getPontosVida());
             jogador.setPontosVida(jogador.getPontosVida() + 5);
-            if(jogador.getClass().getName().equals("Arqueiro"))
+            if (jogador.getClass().getName().equals("Arqueiro"))
                 jogador.setAtributoEspecial(10);
-            else if(jogador.getClass().getName().equals("Mago"))
-                    jogador.setAtributoEspecial(20);
+            else if (jogador.getClass().getName().equals("Mago"))
+                jogador.setAtributoEspecial(20);
             if (jogador.getPontosVida() > jogador.getMaxVida())
                 jogador.setPontosVida(jogador.getMaxVida());
             aperteParaContinuar();
         }
     }
 
-    public static void batalhaFinal(){
+    public static void batalhaFinal() {
 //        Cria Necromante para usuário lutar
-        batalha(new Inimigo("O NECROMANTE",300));
+        batalha(new Inimigo("O NECROMANTE", 300));
         if (jogador.getPontosVida() <= 0) {
             jogadorMorreu();
         }
@@ -305,8 +293,10 @@ public class Jogo {
         checaAto();
         if (ato == 5 && !atoVMostrado) {
             Historia.mostraAtoV();
-            atoVMostrado = true; // Marca o Ato V como mostrado
-            aperteParaContinuar(); // Adiciona uma pausa para o jogador ler o texto
+            atoVMostrado = true;
+            aperteParaContinuar();
+
+    //      Forçando o atoV ser mostrado antes da batalha final
         } else if (ato == 5 && atoVMostrado) {
             batalhaFinal();
         } else {
@@ -321,7 +311,7 @@ public class Jogo {
         System.out.println(jogador.getNome() + " HP: " + jogador.getPontosVida() + "/" + jogador.getMaxVida());
         System.out.println("Classe: " + jogador.getClass().getSimpleName());
         imprimeSeparador(20);
-        System.out.println("Level: " + jogador.getLevel() + " XP: " + jogador.getXp() + "/"+jogador.getXpParaUpar());
+        System.out.println("Level: " + jogador.getLevel() + " XP: " + jogador.getXp() + "/" + jogador.getXpParaUpar());
         imprimeSeparador(20);
         List<Habilidades> habilidades = jogador.getHabilidade();
         if (habilidades.isEmpty()) {
@@ -334,6 +324,7 @@ public class Jogo {
             aperteParaContinuar();
         }
     }
+
     //      Batalha aleatória
     public static void batalhaRandom() {
         limpaConsole();

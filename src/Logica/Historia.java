@@ -1,9 +1,10 @@
 package Logica;
+
 import static Logica.Jogo.*;
 
 
 public class Historia {
-    public static void mostraAtoI(){
+    public static void mostraAtoI() {
         limpaConsole();
         imprimeSeparador(30);
         System.out.println("ATO I - A FLORESTA");
@@ -14,7 +15,8 @@ public class Historia {
         System.out.println("Você se prepara para a batalha, sabendo que precisa sobreviver.");
         aperteParaContinuar();
     }
-    public static void mostraAtoII(){
+
+    public static void mostraAtoII() {
         limpaConsole();
         imprimeSeparador(30);
         System.out.println("ATO II - A VILA");
@@ -25,7 +27,8 @@ public class Historia {
         System.out.println("Você empunha sua arma, determinado a continuar sua jornada.");
         aperteParaContinuar();
     }
-    public static void mostraAtoIII(){
+
+    public static void mostraAtoIII() {
         limpaConsole();
         imprimeSeparador(30);
         System.out.println("ATO III - O DESFILADEIRO");
@@ -36,7 +39,8 @@ public class Historia {
         System.out.println("Você sabe que essa luta será difícil, mas não pode desistir agora.");
         aperteParaContinuar();
     }
-    public static void mostraAtoIV(){
+
+    public static void mostraAtoIV() {
         limpaConsole();
         imprimeSeparador(30);
         System.out.println("ATO IV - O CEMITÉRIO");
@@ -47,7 +51,8 @@ public class Historia {
         System.out.println("Você se prepara para lutar contra o morto-vivo, sentindo o peso da missão.");
         aperteParaContinuar();
     }
-    public static void mostraAtoV(){
+
+    public static void mostraAtoV() {
         limpaConsole();
         imprimeSeparador(30);
         System.out.println("ATO V - A CRIPTA");
@@ -59,7 +64,7 @@ public class Historia {
         aperteParaContinuar();
     }
 
-    public static void mostraFim(){
+    public static void mostraFim() {
         limpaConsole();
         imprimeSeparador(30);
         System.out.println("PARABÉNS!! Você salvou o mundo ao derrotar o Necromancer!");

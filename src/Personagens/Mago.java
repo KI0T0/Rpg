@@ -2,31 +2,30 @@ package Personagens;
 
 import Logica.Habilidades;
 
-import java.util.ArrayList;
-
-public class Mago extends Personagem{
+public class Mago extends Personagem {
     public int pontosMagia;
 
-    public Mago() {}
+    public Mago() {
+    }
 
     public Mago(String nome) {
         super(nome, 6, 4, 3, 0);
         setAtributoEspecial(20);
-        setHabilidade(new Habilidades("Estaca de gelo","Gelo",30));
+        setHabilidade(new Habilidades("Estaca de gelo", "Gelo", 30));
     }
 
     @Override
     public int usarMagia(Inimigo inimigo, Habilidades habilidade) {
-        int dano=0;
+        int dano = 0;
         if (getAtributoEspecial() <= 0) {
             System.out.println("Você se sente sem foco para utilizar sua magia!\n" +
                     "Procure uma poção ou um lugar seguro para descansar!");
-            dano+=-1;
+            dano -= 1;
         } else {
             for (Habilidades hab : habilidades) {
                 if (hab.getNome().equals("Estaca de gelo")) {
                     dano += calcularDano(hab, inimigo);
-                    setAtributoEspecial(getAtributoEspecial()-5);
+                    setAtributoEspecial(getAtributoEspecial() - 5);
                     break;
                 }
             }
@@ -57,13 +56,13 @@ public class Mago extends Personagem{
     }
 
     @Override
-    public String getTipo() {
-        return "Gelo";
+    public void setAtributoEspecial(int pontosMagia) {
+        this.pontosMagia = pontosMagia;
     }
 
     @Override
-    public void setAtributoEspecial(int pontosMagia) {
-        this.pontosMagia = pontosMagia;
+    public String getTipo() {
+        return "Gelo";
     }
 
 }

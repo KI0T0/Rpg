@@ -2,8 +2,6 @@ package Personagens;
 
 import Logica.Habilidades;
 
-import java.util.ArrayList;
-
 public class Guerreiro extends Personagem {
     public int furia;
 
@@ -18,11 +16,11 @@ public class Guerreiro extends Personagem {
 
     @Override
     public int usarMagia(Inimigo inimigo, Habilidades habilidade) {
-        int dano=0;
+        int dano = 0;
         if (getAtributoEspecial() == 1) {
             System.out.println(getNome() + " se acalma e foca na batalha.");
             setAtributoEspecial(0);
-            dano=-1;
+            dano = -1;
         } else {
             setAtributoEspecial(1);
             for (Habilidades hab : habilidades) {
@@ -58,13 +56,13 @@ public class Guerreiro extends Personagem {
     }
 
     @Override
-    public void setAtributoEspecial(int furia) {
-        this.furia = furia;
+    public int getAtributoEspecial() {
+        return this.furia;
     }
 
     @Override
-    public int getAtributoEspecial() {
-        return this.furia;
+    public void setAtributoEspecial(int furia) {
+        this.furia = furia;
     }
 
     @Override

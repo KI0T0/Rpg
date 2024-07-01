@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class Personagem {
 
-//    Atributos
+    //    Atributos
     protected String nome;
     protected int pontosVida;
     protected int maxVida;
@@ -19,8 +19,9 @@ public abstract class Personagem {
     protected List<Habilidades> habilidades;
 
 
-//    Construtores
-    public Personagem(){}
+    //    Construtores
+    public Personagem() {
+    }
 
     public Personagem(String nome, int maxVida, int forca, int defesa, int xp) {
         this.nome = nome;
@@ -34,12 +35,17 @@ public abstract class Personagem {
         this.habilidades = new ArrayList<>();
     }
 
-//    Métodos que todas as classes possuem, porém é diferente para cada uma (por isso o abstract)
+    //    Métodos que todas as classes possuem, porém é diferente para cada uma (por isso o abstract)
     public abstract int atacar(/*adicionar inimigo*/);
+
     public abstract int defender();
+
     public abstract int usarMagia(Inimigo inimigo, Habilidades habilidade);
-    public abstract void setAtributoEspecial(int skill);
+
     public abstract int getAtributoEspecial();
+
+    public abstract void setAtributoEspecial(int skill);
+
     public abstract String getTipo();
 
 
@@ -66,7 +72,7 @@ public abstract class Personagem {
         setForca(getForca() + 3);
     }
 
-    protected int calcularDano(Habilidades habilidade, Personagem alvo){
+    protected int calcularDano(Habilidades habilidade, Personagem alvo) {
         int dano = habilidade.getDanoBase();
 
         // Vantagens e fraquezas baseadas no tipo da habilidade
@@ -83,7 +89,7 @@ public abstract class Personagem {
         return dano;
     }
 
-//    getters e setters
+    //    getters e setters
     public int getLevel() {
         return this.level;
     }
@@ -100,7 +106,7 @@ public abstract class Personagem {
         this.pontosVida = pontosVida;
     }
 
-    public int getMaxVida(){
+    public int getMaxVida() {
         return this.maxVida;
     }
 
@@ -108,20 +114,20 @@ public abstract class Personagem {
         this.maxVida = maxVida;
     }
 
-    public int getXp(){
+    public int getXp() {
         return this.xp;
     }
 
-    public void setXp(int xp){
+    public void setXp(int xp) {
         this.xp += xp;
         checaLevel();
     }
 
-    public List<Habilidades> getHabilidade(){
+    public List<Habilidades> getHabilidade() {
         return this.habilidades;
     }
 
-    public void setHabilidade(Habilidades habilidade){
+    public void setHabilidade(Habilidades habilidade) {
         this.habilidades.add(habilidade);
     }
 

@@ -5,27 +5,27 @@ import Logica.Habilidades;
 public class Arqueiro extends Personagem {
     public int destreza;
 
-    public Arqueiro() {}
-
+    public Arqueiro() {
+    }
 
     public Arqueiro(String nome) {
         super(nome, 7, 5, 4, 0);
         setAtributoEspecial(10);
-        setHabilidade(new Habilidades("Flecha Trovoada","Trovão",15));
+        setHabilidade(new Habilidades("Flecha Trovoada", "Trovão", 15));
     }
 
     @Override
     public int usarMagia(Inimigo inimigo, Habilidades habilidade) {
         int dano = 0;
-        if(getAtributoEspecial()<=0) {
+        if (getAtributoEspecial() <= 0) {
             System.out.println("Você se seus reflexos mais lentos!\n" +
                     "Procure uma poção ou um lugar seguro para descansar!");
-            dano+=-1;
+            dano -= 1;
         } else {
             for (Habilidades hab : habilidades) {
                 if (hab.getNome().equals("Flecha Trovoada")) {
                     dano += calcularDano(hab, inimigo);
-                    setAtributoEspecial(getAtributoEspecial()-3);
+                    setAtributoEspecial(getAtributoEspecial() - 3);
                     break;
                 }
             }
@@ -45,7 +45,6 @@ public class Arqueiro extends Personagem {
         return danoBase;
     }
 
-
     @Override
     public int defender() {
         int reducaoDefesa = (int) (Math.random() * (getDefesa() / 2.0)) + 1;
@@ -58,13 +57,13 @@ public class Arqueiro extends Personagem {
     }
 
     @Override
-    public String getTipo() {
-        return "Trovão";
+    public void setAtributoEspecial(int destreza) {
+        this.destreza = destreza;
     }
 
     @Override
-    public void setAtributoEspecial(int destreza) {
-        this.destreza = destreza;
+    public String getTipo() {
+        return "Trovão";
     }
 
 }

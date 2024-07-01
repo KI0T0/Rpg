@@ -11,7 +11,6 @@ public class Habilidades {
         this.danoBase = danoBase;
     }
 
-
     public String getNome() {
         return nome;
     }
